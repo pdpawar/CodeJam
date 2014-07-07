@@ -1,0 +1,6 @@
+D:\CodeJam\Dating\bin\Debug\Dating.exe.config
+D:\CodeJam\Dating\bin\Debug\Dating.exe
+D:\CodeJam\Dating\bin\Debug\Dating.pdb
+D:\CodeJam\Dating\obj\Debug\Dating.exe
+D:\CodeJam\Dating\obj\Debug\Dating.pdb
+D:\CodeJam\Dating\obj\Debug\Dating.csprojResolveAssemblyReference.cache
