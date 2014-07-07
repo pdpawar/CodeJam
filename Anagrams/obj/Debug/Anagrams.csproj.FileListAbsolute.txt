@@ -1,0 +1,6 @@
+D:\pramod\CodeJam\CodeJam\Anagrams\bin\Debug\Anagrams.exe.config
+D:\pramod\CodeJam\CodeJam\Anagrams\bin\Debug\Anagrams.exe
+D:\pramod\CodeJam\CodeJam\Anagrams\bin\Debug\Anagrams.pdb
+D:\pramod\CodeJam\CodeJam\Anagrams\obj\Debug\Anagrams.csprojResolveAssemblyReference.cache
+D:\pramod\CodeJam\CodeJam\Anagrams\obj\Debug\Anagrams.exe
+D:\pramod\CodeJam\CodeJam\Anagrams\obj\Debug\Anagrams.pdb
