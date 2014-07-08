@@ -32,10 +32,11 @@ namespace Codejam
         /**
          * to update remove characters after pair is selected
          */ 
-        private string removeCharacters(int chooserIndex, int chosenIndex)
+        private string removeCharacters(char chooserChar, char chosenChar)
         {
-            originalString.RemoveAt(chooserIndex);
-            originalString.RemoveAt(chosenIndex==0? (0) : (chosenIndex - 1));
+            originalString.Remove(chooserChar);
+            originalString.Remove(chosenChar);
+         
             return convertToString(originalString);
         }
 
@@ -75,7 +76,8 @@ namespace Codejam
 
         private void generateDates(ref String circle, ref string dates, int chooserIndex)
         {
-            startChar = (chooserIndex == circle.Length - 1 ? circle[0] : circle[chooserIndex + 1]);
+          
+            startChar = (chooserIndex == circle.Length - 1? circle[0] : circle[chooserIndex + 1]);
           
             if (Char.IsLower(circle, chooserIndex))
             {
@@ -89,17 +91,29 @@ namespace Codejam
 
         private void chooseFemale(ref String circle, ref string dates, int chooserIndex)
         {
+            validateStartChar(lowerCaseLetterList[0], circle);
             dates += circle[chooserIndex] + "" + lowerCaseLetterList[0] + " ";
             upperCaseLetterList.Remove(circle[chooserIndex]);
-            circle = removeCharacters(chooserIndex, circle.IndexOf(lowerCaseLetterList[0]));
+            circle = removeCharacters(circle[chooserIndex],lowerCaseLetterList[0]);
             lowerCaseLetterList.RemoveAt(0);
+        }
+
+         void validateStartChar(char choosenChar, string circle)
+        {
+            int charPosition;
+            if (startChar == choosenChar)
+            {
+                charPosition = (circle.IndexOf(choosenChar) + 1) % circle.Length;
+                startChar = circle[charPosition];
+            } 
         }
 
         private void chooseMale(ref String circle, ref string dates, int chooserIndex)
         {
+            validateStartChar(upperCaseLetterList[0], circle);
             dates += circle[chooserIndex] + "" + upperCaseLetterList[0] + " ";
             lowerCaseLetterList.Remove(circle[chooserIndex]);
-            circle = removeCharacters(chooserIndex, circle.IndexOf(upperCaseLetterList[0]));
+            circle = removeCharacters(circle[chooserIndex], upperCaseLetterList[0]);
             upperCaseLetterList.RemoveAt(0);
         }
 
@@ -115,24 +129,34 @@ namespace Codejam
             }
         }
 
+        private void reset()
+        {
+            upperCaseLetterList.Clear();
+            lowerCaseLetterList.Clear();
+            originalString.Clear();
+        }
+
         String Dates(String circle, int k)
         {
             string dates = string.Empty;
 
+            reset();
+
+            circle = circle.Trim();
             GetUpperCaseAndLowerCaseList(circle);
 
             if (validatePriorityList())
             {
                 startIndex = 0;
-                while (circle.Length > 1)
+                while (circle.Length > 1 && validatePriorityList())
                 {
                     int chooserIndex = GetIndexOfChooser(circle, k - 1);
                     generateDates(ref circle, ref dates, chooserIndex);
                     startIndex = circle.IndexOf(startChar);
                 }
             }
-                    
 
+            dates = dates.TrimEnd();
             return dates;
         }
         

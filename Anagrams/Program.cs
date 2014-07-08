@@ -84,9 +84,11 @@ namespace Codejam
 
 		int GetMaximumSubset(string[] words)
 		{
+            anagramSet.Clear();
 			for (int j = 0; j < words.Length; j++)
 			{
 				string subject = words[j];
+                subject = subject.Trim();
 
 				if (ValidateFlagedAnagrams(subject))
 				{
@@ -98,6 +100,7 @@ namespace Codejam
 				for (int i = j + 1; i < words.Length; i++)
 				{
 					string target = words[i];
+                    target = target.Trim();
 
 					if (ValidateContent(subject, target))
 					{
