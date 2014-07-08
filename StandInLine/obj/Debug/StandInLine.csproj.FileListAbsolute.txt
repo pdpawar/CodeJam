@@ -1,0 +1,6 @@
+D:\CodeJam\StandInLine\bin\Debug\StandInLine.exe.config
+D:\CodeJam\StandInLine\bin\Debug\StandInLine.exe
+D:\CodeJam\StandInLine\bin\Debug\StandInLine.pdb
+D:\CodeJam\StandInLine\obj\Debug\StandInLine.csprojResolveAssemblyReference.cache
+D:\CodeJam\StandInLine\obj\Debug\StandInLine.exe
+D:\CodeJam\StandInLine\obj\Debug\StandInLine.pdb
