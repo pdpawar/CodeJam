@@ -1,0 +1,6 @@
+D:\CodeJam\Pool\bin\Debug\Pool.exe.config
+D:\CodeJam\Pool\bin\Debug\Pool.exe
+D:\CodeJam\Pool\bin\Debug\Pool.pdb
+D:\CodeJam\Pool\obj\Debug\Pool.csprojResolveAssemblyReference.cache
+D:\CodeJam\Pool\obj\Debug\Pool.exe
+D:\CodeJam\Pool\obj\Debug\Pool.pdb
