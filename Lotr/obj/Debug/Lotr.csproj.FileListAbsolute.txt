@@ -1,6 +1,0 @@
-D:\CodeJam\Lotr\bin\Debug\Lotr.exe.config
-D:\CodeJam\Lotr\bin\Debug\Lotr.exe
-D:\CodeJam\Lotr\bin\Debug\Lotr.pdb
-D:\CodeJam\Lotr\obj\Debug\Lotr.csprojResolveAssemblyReference.cache
-D:\CodeJam\Lotr\obj\Debug\Lotr.exe
-D:\CodeJam\Lotr\obj\Debug\Lotr.pdb
