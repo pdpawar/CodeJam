@@ -9,7 +9,9 @@ namespace Codejam
         readonly string invalidDecode = "NONE";
         public String[] Decode(string test)
         {
-            List<int> inputElements = test.Select(element => element - '0').ToList();
+            List<int> inputElements = test
+                                          .Select(element => element - '0')
+                                          .ToList();
 
             List<String> decodedStrings = new List<string>();
 
@@ -27,11 +29,16 @@ namespace Codejam
             for (int i = 1; i < inputElements.Count; i++)
             {
                 int sum = 0;
-                outputElements.Select((element, index) => new { Value = element, Index = index }).Where(element => element.Index >= ((i - 2) > -1 ? (i - 2) : (i - 1)) && element.Index < i).ToList().ForEach(element => sum = sum + element.Value);
+                outputElements
+                        .Select((element, index) => new { Value = element, Index = index })
+                        .Where(element => element.Index >= ((i - 2) > -1 ? (i - 2) : (i - 1)) && element.Index < i)
+                        .ToList()
+                        .ForEach(element => sum = sum + element.Value);
                 outputElements.Add(inputElements[i - 1] - sum);
             }
 
-            return ValidateLastElementOfDecodedOutPut(inputElements, outputElements) ? ValidateDecodedOutput(outputElements) : invalidDecode;
+            return ValidateLastElementOfDecodedOutPut(inputElements, outputElements) ? 
+                                                ValidateDecodedOutput(outputElements) : invalidDecode;
         }
 
         private string GetDecodeStringBySizeOfInput(List<int> inputElements, int initialvalueToConsider)
@@ -44,7 +51,8 @@ namespace Codejam
             {
                 if (inputElements[0] <= initialvalueToConsider)
                 {
-                    return (inputElements[inputElements.Count() - 1] - initialvalueToConsider) >= 0 ? inputElements[0] + "" : invalidDecode;
+                    return (inputElements[inputElements.Count() - 1] - initialvalueToConsider) >= 0 ? 
+                                                                                inputElements[0] + "" : invalidDecode;
                 }
                 else return invalidDecode;
             }
@@ -54,7 +62,11 @@ namespace Codejam
         {
             String decodeOutput = "";
 
-            return outputElements.Select((element, index) => new { Value = element, Index = index }).Where(element => element.Value < 0 || element.Value > 1).ToList().Count() > 0 ? invalidDecode : GetValidDecodeString(outputElements, decodeOutput);
+            return outputElements
+                                .Select((element, index) => new { Value = element, Index = index })
+                                .Where(element => element.Value < 0 || element.Value > 1)
+                                .ToList()
+                                .Count() > 0 ? invalidDecode : GetValidDecodeString(outputElements, decodeOutput);
         }
 
         private bool ValidateLastElementOfDecodedOutPut(List<int> inputElements, List<int> outputElements)
@@ -64,7 +76,8 @@ namespace Codejam
 
         private string GetValidDecodeString(List<int> outputElements, String decodeOutput)
         {
-            Array.ForEach(outputElements.ConvertAll(element => "" + element).ToArray(), convertedElement => decodeOutput += convertedElement);
+            Array.ForEach(outputElements.ConvertAll(element => "" + element)
+                .ToArray(), convertedElement => decodeOutput += convertedElement);
             return decodeOutput;
         }
 
