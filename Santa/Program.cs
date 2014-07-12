@@ -15,33 +15,35 @@ namespace Codejam
         int MaxDays(string[] prices, int budget)
         {
             List<char> listOfSelectedDishBySanta = new List<char>();
+            List<int> listOfSelectedDishIndexBySanta = new List<int>();
             int noOfWeeks = prices.Length <= 7 ? 1 : prices.Length / 7;
          
             totalNumberOfDaysSantaCanEat = 0;
             totalbudgetSpent = 0;
-
-            prices.ToList().ForEach(x => listOfSelectedDishBySanta.Add(FindCheapestDishOfDay(x)));
-
-            CalculateTotalDaysForFirstWeek(budget, listOfSelectedDishBySanta);
-
-            CalculateTotalDaysForRestWeeks(prices, budget, listOfSelectedDishBySanta);   
+           
+            prices.ToList().ForEach(x => listOfSelectedDishIndexBySanta.Add(FindIndexOfCheapestDishOfDay(x)));
+  
+            CalculateTotalDaysForFirstWeek(budget, listOfSelectedDishIndexBySanta, prices);
+           
+            CalculateTotalDaysForRestWeeks(prices, budget, listOfSelectedDishIndexBySanta); 
            
             return totalNumberOfDaysSantaCanEat;
         }
 
-        private void CalculateTotalDaysForRestWeeks(string[] prices, int budget, List<char> listOfSelectedDishBySanta)
+        private void CalculateTotalDaysForRestWeeks(string[] prices, int budget, List<int> listOfSelectedDishIndexBySanta)
         {
             for (int currentDay = 8; currentDay <= prices.Length && CheckBudget(budget); currentDay++)
             {
-                UpdateBudget(prices, budget, listOfSelectedDishBySanta, currentDay);
+                UpdateBudget(prices, budget, listOfSelectedDishIndexBySanta, currentDay);
             }
         }
 
-        private void CalculateTotalDaysForFirstWeek(int budget, List<char> listOfSelectedDishBySanta)
+    
+        private void CalculateTotalDaysForFirstWeek(int budget, List<int> listOfSelectedDishIndexBySanta, string[] prices)
         {
-            listOfSelectedDishBySanta.Select((x, i) => new { Index = i, Value = x }).Where(x => x.Index < 7).ToList().ForEach(selectedDishPrice =>
+            listOfSelectedDishIndexBySanta.Select((x, i) => new { Index = i, Value = x }).Where(x => x.Index < 7).ToList().ForEach(selectedDishPriceIndex =>
             {
-                totalbudgetSpent += GetPriceOfLetter(selectedDishPrice.Value);
+                totalbudgetSpent += GetPriceOfLetter(prices[selectedDishPriceIndex.Index][selectedDishPriceIndex.Value]);
                 if (CheckBudget(budget))
                 {
                     totalNumberOfDaysSantaCanEat++;
@@ -54,40 +56,38 @@ namespace Codejam
             return totalbudgetSpent <= budget;
         }
 
-
-        private void UpdateBudget(string[] prices, int budget, List<char> listOfSelectedDishBySanta, int currentDay)
-        {
-            List<int> priceOfDishForAllWeek = new List<int>();
+        private void UpdateBudget(string[] prices, int budget, List<int> listOfSelectedDishIndexBySanta, int currentDay)
+        { 
             List<int> sumOfDishes = new List<int>();
 
             int dayInFirstWeek = (currentDay - 1) % 7;
 
-            int indexOfCheapestDishSelected = prices[dayInFirstWeek].IndexOf(listOfSelectedDishBySanta[dayInFirstWeek]);
+            int indexOfCheapestDishSelected = listOfSelectedDishIndexBySanta[dayInFirstWeek];
 
             UpdateListOfTotalAmountToSpendOnDishForADay(prices, currentDay, sumOfDishes, dayInFirstWeek);
 
             if (sumOfDishes.IndexOf(sumOfDishes.Min()) != indexOfCheapestDishSelected)
             {
-                ChangeDishAsPerMinTotalAmountToSpendOnDishForADay(prices, budget, listOfSelectedDishBySanta, currentDay, sumOfDishes, dayInFirstWeek);
+                ChangeDishAsPerMinTotalAmountToSpendOnDishForADay(prices, budget, listOfSelectedDishIndexBySanta, currentDay, sumOfDishes, dayInFirstWeek);
             }
-            else 
+            else
             {
-                UpdateBudgetForADay(prices, budget, listOfSelectedDishBySanta, currentDay, indexOfCheapestDishSelected);
+                UpdateBudgetForADay(prices, budget, listOfSelectedDishIndexBySanta, currentDay, indexOfCheapestDishSelected);
             }
         }
 
-        private void UpdateBudgetForADay(string[] prices, int budget, List<char> listOfSelectedDishBySanta, int currentDay, int indexOfCheapestDishSelected)
+        private void UpdateBudgetForADay(string[] prices, int budget, List<int> listOfSelectedDishIndexBySanta, int currentDay, int indexOfCheapestDishSelected)
         {
             totalbudgetSpent += GetPriceOfLetter(prices[currentDay - 1][indexOfCheapestDishSelected]);
-            listOfSelectedDishBySanta[currentDay - 1] = prices[currentDay - 1][indexOfCheapestDishSelected];
+            listOfSelectedDishIndexBySanta[currentDay - 1] = indexOfCheapestDishSelected;
             if (CheckBudget(budget))
                 totalNumberOfDaysSantaCanEat++;
         }
 
-        private void ChangeDishAsPerMinTotalAmountToSpendOnDishForADay(string[] prices, int budget, List<char> listOfSelectedDishBySanta, int currentDay, List<int> sumOfDishes, int dayInFirstWeek)
+        private void ChangeDishAsPerMinTotalAmountToSpendOnDishForADay(string[] prices, int budget, List<int> listOfSelectedDishIndexBySanta, int currentDay, List<int> sumOfDishes, int dayInFirstWeek)
         {
             for (int dayOfWeek = dayInFirstWeek; dayOfWeek < currentDay - 1; dayOfWeek += 7)
-                totalbudgetSpent -= GetPriceOfLetter(listOfSelectedDishBySanta[dayOfWeek]);
+                totalbudgetSpent -= GetPriceOfLetter(prices[dayOfWeek][listOfSelectedDishIndexBySanta[dayOfWeek]]);
 
             totalbudgetSpent += sumOfDishes.Min();
 
@@ -95,23 +95,24 @@ namespace Codejam
             {
                 totalNumberOfDaysSantaCanEat++;
 
-                UpdateListOfDishSelected(prices, listOfSelectedDishBySanta, currentDay, sumOfDishes, dayInFirstWeek);
+                UpdateListOfDishSelected(prices, listOfSelectedDishIndexBySanta, currentDay, sumOfDishes, dayInFirstWeek);
             }
         }
 
-        private void UpdateListOfDishSelected(string[] prices, List<char> listOfSelectedDishBySanta, int currentDay, List<int> sumOfDishes, int dayInFirstWeek)
+        private void UpdateListOfDishSelected(string[] prices, List<int> listOfSelectedDishIndexBySanta, int currentDay, List<int> sumOfDishes, int dayInFirstWeek)
         {
-            listOfSelectedDishBySanta[dayInFirstWeek] = prices[dayInFirstWeek][sumOfDishes.IndexOf(sumOfDishes.Min())];
+            listOfSelectedDishIndexBySanta[dayInFirstWeek] = sumOfDishes.IndexOf(sumOfDishes.Min());
 
             for (int dayOfWeek = dayInFirstWeek; dayOfWeek < currentDay; dayOfWeek += 7)
-                listOfSelectedDishBySanta[dayOfWeek] = prices[dayOfWeek][sumOfDishes.IndexOf(sumOfDishes.Min())];
+                listOfSelectedDishIndexBySanta[dayOfWeek] = sumOfDishes.IndexOf(sumOfDishes.Min());
         }
 
         private void UpdateListOfTotalAmountToSpendOnDishForADay(string[] prices, int currentDay, List<int> sumOfDishes, int dayInFirstWeek)
         {
+            int sum;
             for (int i = 0; i < prices[dayInFirstWeek].Length; i++)
             {
-                int sum = 0;
+                sum = 0;
                 for (int dayOfWeek = dayInFirstWeek; dayOfWeek < currentDay; dayOfWeek += 7)
                 {
                     sum += GetPriceOfLetter(prices[dayOfWeek][i]);
@@ -119,7 +120,22 @@ namespace Codejam
 
                 sumOfDishes.Add(sum);
             }
-        }   
+        }
+
+        int FindIndexOfCheapestDishOfDay(string priceValue)
+        {
+            int cheapestDishIndex = 0;
+
+            for (int i = 1; i < priceValue.Length; i++)
+            {
+                if (GetPriceOfLetter(priceValue[i]) < GetPriceOfLetter(priceValue[cheapestDishIndex]))
+                {
+                    cheapestDishIndex = i;
+                }
+            }
+
+            return cheapestDishIndex;
+        }
 
         char FindCheapestDishOfDay(string priceValue)
         {
@@ -151,7 +167,7 @@ namespace Codejam
             return lowerLetterBasePrice + diffByAsciiValue;
         }
 
-        public int GetPriceOfLetter(char letter)
+        private int GetPriceOfLetter(char letter)
         {
             if (Char.IsNumber(letter))
                 return Int32.Parse(letter + "");
